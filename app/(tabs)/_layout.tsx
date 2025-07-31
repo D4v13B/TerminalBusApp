@@ -1,6 +1,13 @@
 import { useTheme } from '@/contexts/ThemeContext';
 import { Tabs } from 'expo-router';
-import { Clock, Headphones, Chrome as Home, Search, User } from 'lucide-react-native';
+import {
+  Clock,
+  Headphones,
+  Chrome as Home,
+  Map,
+  Search,
+  User,
+} from 'lucide-react-native';
 
 export default function TabLayout() {
   const { theme } = useTheme();
@@ -28,27 +35,28 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Inicio',
-          tabBarIcon: ({ size, color }) => (
-            <Home size={size} color={color} />
-          ),
+          tabBarIcon: ({ size, color }) => <Home size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="search"
         options={{
           title: 'Buscar',
-          tabBarIcon: ({ size, color }) => (
-            <Search size={size} color={color} />
-          ),
+          tabBarIcon: ({ size, color }) => <Search size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="paradas"
+        options={{
+          title: 'Rutas',
+          tabBarIcon: ({ size, color }) => <Map size={size} color={color} />,
         }}
       />
       <Tabs.Screen
         name="tickets"
         options={{
           title: 'Boletos',
-          tabBarIcon: ({ size, color }) => (
-            <Clock size={size} color={color} />
-          ),
+          tabBarIcon: ({ size, color }) => <Clock size={size} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -64,9 +72,7 @@ export default function TabLayout() {
         name="profile"
         options={{
           title: 'Perfil',
-          tabBarIcon: ({ size, color }) => (
-            <User size={size} color={color} />
-          ),
+          tabBarIcon: ({ size, color }) => <User size={size} color={color} />,
         }}
       />
     </Tabs>
