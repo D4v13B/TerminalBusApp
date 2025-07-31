@@ -1,75 +1,235 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { useAuth } from '@/contexts/AuthContext';
+import { useTheme } from '@/contexts/ThemeContext';
+import Card from '@/presentation/components/Card';
+import { router } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { Clock, MapPin, Search, Star } from 'lucide-react-native';
+import React from 'react';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 export default function HomeScreen() {
+  const { user } = useAuth();
+  const { theme } = useTheme();
+
+  const popularRoutes = [
+    { id: '1', origin: 'Ciudad de Panamá', destination: 'David', price: 15, duration: '5h 30m' },
+    { id: '2', origin: 'Colón', destination: 'Santiago', price: 12, duration: '3h 45m' },
+    { id: '3', origin: 'Chitré', destination: 'Las Tablas', price: 8, duration: '1h 15m' },
+  ];
+
+  const recentTrips = [
+    { id: '1', destination: 'David', date: '2024-01-15', status: 'Completado' },
+    { id: '2', destination: 'Santiago', date: '2024-01-10', status: 'Completado' },
+  ];
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+    },
+    header: {
+      backgroundColor: theme.colors.primary,
+      paddingTop: 50,
+      paddingBottom: theme.spacing.xl,
+      paddingHorizontal: theme.spacing.lg,
+    },
+    greeting: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: theme.colors.textInverse,
+      marginBottom: theme.spacing.xs,
+    },
+    subtitle: {
+      fontSize: 16,
+      color: theme.colors.textInverse,
+      opacity: 0.9,
+    },
+    content: {
+      flex: 1,
+      padding: theme.spacing.lg,
+    },
+    section: {
+      marginBottom: theme.spacing.xl,
+    },
+    sectionTitle: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: theme.colors.text,
+      marginBottom: theme.spacing.md,
+    },
+    quickActions: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      gap: theme.spacing.md,
+    },
+    actionCard: {
+      flex: 1,
+      alignItems: 'center',
+      padding: theme.spacing.lg,
+    },
+    actionIcon: {
+      marginBottom: theme.spacing.sm,
+    },
+    actionText: {
+      fontSize: 14,
+      fontWeight: '500',
+      color: theme.colors.text,
+      textAlign: 'center',
+    },
+    routeCard: {
+      marginBottom: theme.spacing.md,
+      padding: theme.spacing.lg,
+    },
+    routeHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start',
+      marginBottom: theme.spacing.sm,
+    },
+    routePath: {
+      flex: 1,
+    },
+    cityText: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: theme.colors.text,
+    },
+    arrowText: {
+      fontSize: 14,
+      color: theme.colors.textSecondary,
+      marginVertical: theme.spacing.xs,
+    },
+    priceText: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: theme.colors.primary,
+    },
+    routeInfo: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: theme.spacing.md,
+    },
+    infoItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: theme.spacing.xs,
+    },
+    infoText: {
+      fontSize: 12,
+      color: theme.colors.textSecondary,
+    },
+    tripCard: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: theme.spacing.md,
+      marginBottom: theme.spacing.md,
+    },
+    tripInfo: {
+      flex: 1,
+    },
+    tripDestination: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: theme.colors.text,
+    },
+    tripDate: {
+      fontSize: 14,
+      color: theme.colors.textSecondary,
+    },
+    statusText: {
+      fontSize: 12,
+      fontWeight: '500',
+      color: theme.colors.success,
+    },
+  });
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <View style={styles.container}>
+      <StatusBar style="light" />
+      
+      <View style={styles.header}>
+        <Text style={styles.greeting}>
+          ¡Hola, {user?.name?.split(' ')[0] || 'Usuario'}!
+        </Text>
+        <Text style={styles.subtitle}>
+          ¿Listo para tu próximo viaje?
+        </Text>
+      </View>
+
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+        {/* Quick Actions */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Acciones Rápidas</Text>
+          <View style={styles.quickActions}>
+            <Pressable onPress={() => router.push('/(tabs)/search')}>
+              <Card style={styles.actionCard}>
+                <Search size={32} color={theme.colors.primary} style={styles.actionIcon} />
+                <Text style={styles.actionText}>Buscar Rutas</Text>
+              </Card>
+            </Pressable>
+            
+            <Pressable onPress={() => router.push('/(tabs)/tickets')}>
+              <Card style={styles.actionCard}>
+                <Clock size={32} color={theme.colors.primary} style={styles.actionIcon} />
+                <Text style={styles.actionText}>Mis Boletos</Text>
+              </Card>
+            </Pressable>
+            
+            <Pressable>
+              <Card style={styles.actionCard}>
+                <MapPin size={32} color={theme.colors.primary} style={styles.actionIcon} />
+                <Text style={styles.actionText}>Terminales</Text>
+              </Card>
+            </Pressable>
+          </View>
+        </View>
+
+        {/* Popular Routes */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Rutas Populares</Text>
+          {popularRoutes.map((route) => (
+            <Pressable key={route.id} onPress={() => router.push('/(tabs)/search')}>
+              <Card style={styles.routeCard}>
+                <View style={styles.routeHeader}>
+                  <View style={styles.routePath}>
+                    <Text style={styles.cityText}>{route.origin}</Text>
+                    <Text style={styles.arrowText}>↓</Text>
+                    <Text style={styles.cityText}>{route.destination}</Text>
+                  </View>
+                  <Text style={styles.priceText}>${route.price}</Text>
+                </View>
+                <View style={styles.routeInfo}>
+                  <View style={styles.infoItem}>
+                    <Clock size={16} color={theme.colors.textSecondary} />
+                    <Text style={styles.infoText}>{route.duration}</Text>
+                  </View>
+                  <View style={styles.infoItem}>
+                    <Star size={16} color={theme.colors.accent} />
+                    <Text style={styles.infoText}>4.8</Text>
+                  </View>
+                </View>
+              </Card>
+            </Pressable>
+          ))}
+        </View>
+
+        {/* Recent Trips */}
+        {recentTrips.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Viajes Recientes</Text>
+            {recentTrips.map((trip) => (
+              <Card key={trip.id} style={styles.tripCard}>
+                <View style={styles.tripInfo}>
+                  <Text style={styles.tripDestination}>{trip.destination}</Text>
+                  <Text style={styles.tripDate}>{trip.date}</Text>
+                </View>
+                <Text style={styles.statusText}>{trip.status}</Text>
+              </Card>
+            ))}
+          </View>
+        )}
+      </ScrollView>
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
