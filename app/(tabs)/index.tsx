@@ -59,13 +59,14 @@ export default function HomeScreen() {
     },
     quickActions: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
+      // justifyContent: 'space-between',
       gap: theme.spacing.md,
     },
     actionCard: {
       flex: 1,
       alignItems: 'center',
       padding: theme.spacing.lg,
+      marginHorizontal: 5,
     },
     actionIcon: {
       marginBottom: theme.spacing.sm,
@@ -161,7 +162,7 @@ export default function HomeScreen() {
         {/* Quick Actions */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Acciones Rápidas</Text>
-          <View style={styles.quickActions}>
+          <ScrollView horizontal={true} style={styles.quickActions}>
             <Pressable onPress={() => router.push('/(tabs)/search')}>
               <Card style={styles.actionCard}>
                 <Search size={32} color={theme.colors.primary} style={styles.actionIcon} />
@@ -182,7 +183,7 @@ export default function HomeScreen() {
                 <Text style={styles.actionText}>Terminales</Text>
               </Card>
             </Pressable>
-          </View>
+          </ScrollView>
         </View>
 
         {/* Popular Routes */}

@@ -1,14 +1,26 @@
 import { useTheme } from '@/contexts/ThemeContext';
 import Card from '@/presentation/components/Card';
 import Input from '@/presentation/components/Input';
+import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { Mail, MessageCircle, Phone } from 'lucide-react-native';
+import { Mail, MessageCircle, MessageCircleIcon, Phone } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { Alert, Button, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  Alert,
+  Button,
+  Linking,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 export default function SupportScreen() {
   const { theme } = useTheme();
-  const [activeSection, setActiveSection] = useState<'contact' | 'report' | 'faq'>('contact');
+  const [activeSection, setActiveSection] = useState<
+    'contact' | 'report' | 'faq'
+  >('contact');
   const [reportData, setReportData] = useState({
     type: '',
     subject: '',
@@ -20,13 +32,19 @@ export default function SupportScreen() {
       icon: MessageCircle,
       title: 'Chat en vivo',
       description: 'Habla con nuestro equipo de soporte',
-      action: () => Alert.alert('Chat', 'Iniciando chat en vivo...'),
+      action: () => router.push('/(tabs)/support/chat'),
     },
     {
       icon: Phone,
       title: 'Llamar',
-      description: '+507 123-4567',
-      action: () => Alert.alert('Llamar', 'Marcando número de soporte...'),
+      description: '+507 6724-8070',
+      action: () => Linking.openURL('tel:+50767248070'),
+    },
+    {
+      icon: MessageCircleIcon,
+      title: 'WhatsApp',
+      description: '+507 6837-5569',
+      action: () => Linking.openURL('https://wa.me/50768375569'),
     },
     {
       icon: Mail,
@@ -39,19 +57,23 @@ export default function SupportScreen() {
   const faqItems = [
     {
       question: '¿Cómo puedo cancelar mi boleto?',
-      answer: 'Puedes cancelar tu boleto hasta 2 horas antes de la salida desde la sección "Mis Boletos".',
+      answer:
+        'Puedes cancelar tu boleto hasta 2 horas antes de la salida desde la sección "Mis Boletos".',
     },
     {
       question: '¿Qué hago si pierdo mi boleto digital?',
-      answer: 'Tu boleto digital está guardado en tu cuenta. Puedes acceder a él desde "Mis Boletos" en cualquier momento.',
+      answer:
+        'Tu boleto digital está guardado en tu cuenta. Puedes acceder a él desde "Mis Boletos" en cualquier momento.',
     },
     {
       question: '¿Los precios incluyen todos los impuestos?',
-      answer: 'Sí, todos los precios mostrados incluyen impuestos y tasas aplicables.',
+      answer:
+        'Sí, todos los precios mostrados incluyen impuestos y tasas aplicables.',
     },
     {
       question: '¿Puedo cambiar la fecha de mi viaje?',
-      answer: 'Sí, puedes cambiar la fecha hasta 24 horas antes del viaje, sujeto a disponibilidad.',
+      answer:
+        'Sí, puedes cambiar la fecha hasta 24 horas antes del viaje, sujeto a disponibilidad.',
     },
   ];
 
@@ -64,7 +86,13 @@ export default function SupportScreen() {
     Alert.alert(
       'Reporte enviado',
       'Tu reporte ha sido enviado. Te contactaremos pronto.',
-      [{ text: 'OK', onPress: () => setReportData({ type: '', subject: '', description: '' }) }]
+      [
+        {
+          text: 'OK',
+          onPress: () =>
+            setReportData({ type: '', subject: '', description: '' }),
+        },
+      ]
     );
   };
 
@@ -181,16 +209,24 @@ export default function SupportScreen() {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-      
+
       <View style={styles.header}>
         <Text style={styles.title}>Soporte</Text>
-        
+
         <View style={styles.tabs}>
           <Pressable
-            style={[styles.tab, activeSection === 'contact' && styles.activeTab]}
+            style={[
+              styles.tab,
+              activeSection === 'contact' && styles.activeTab,
+            ]}
             onPress={() => setActiveSection('contact')}
           >
-            <Text style={[styles.tabText, activeSection === 'contact' && styles.activeTabText]}>
+            <Text
+              style={[
+                styles.tabText,
+                activeSection === 'contact' && styles.activeTabText,
+              ]}
+            >
               Contacto
             </Text>
           </Pressable>
@@ -198,7 +234,12 @@ export default function SupportScreen() {
             style={[styles.tab, activeSection === 'report' && styles.activeTab]}
             onPress={() => setActiveSection('report')}
           >
-            <Text style={[styles.tabText, activeSection === 'report' && styles.activeTabText]}>
+            <Text
+              style={[
+                styles.tabText,
+                activeSection === 'report' && styles.activeTabText,
+              ]}
+            >
               Reportar
             </Text>
           </Pressable>
@@ -206,7 +247,12 @@ export default function SupportScreen() {
             style={[styles.tab, activeSection === 'faq' && styles.activeTab]}
             onPress={() => setActiveSection('faq')}
           >
-            <Text style={[styles.tabText, activeSection === 'faq' && styles.activeTabText]}>
+            <Text
+              style={[
+                styles.tabText,
+                activeSection === 'faq' && styles.activeTabText,
+              ]}
+            >
               FAQ
             </Text>
           </Pressable>
@@ -219,10 +265,16 @@ export default function SupportScreen() {
             {contactOptions.map((option, index) => (
               <Pressable key={index} onPress={option.action}>
                 <Card style={styles.contactOption}>
-                  <option.icon size={24} color={theme.colors.primary} style={styles.contactIcon} />
+                  <option.icon
+                    size={24}
+                    color={theme.colors.primary}
+                    style={styles.contactIcon}
+                  />
                   <View style={styles.contactText}>
                     <Text style={styles.contactTitle}>{option.title}</Text>
-                    <Text style={styles.contactDescription}>{option.description}</Text>
+                    <Text style={styles.contactDescription}>
+                      {option.description}
+                    </Text>
                   </View>
                 </Card>
               </Pressable>
@@ -244,7 +296,9 @@ export default function SupportScreen() {
             <Input
               label="Asunto"
               value={reportData.subject}
-              onChangeText={(value) => setReportData(prev => ({ ...prev, subject: value }))}
+              onChangeText={(value) =>
+                setReportData((prev) => ({ ...prev, subject: value }))
+              }
               placeholder="Describe brevemente el problema"
               required
             />
@@ -252,17 +306,16 @@ export default function SupportScreen() {
             <Input
               label="Descripción detallada"
               value={reportData.description}
-              onChangeText={(value) => setReportData(prev => ({ ...prev, description: value }))}
+              onChangeText={(value) =>
+                setReportData((prev) => ({ ...prev, description: value }))
+              }
               placeholder="Proporciona todos los detalles posibles..."
               multiline
               style={styles.textArea}
               required
             />
 
-            <Button
-              title="Enviar Reporte"
-              onPress={handleSubmitReport}
-            />
+            <Button title="Enviar Reporte" onPress={handleSubmitReport} />
           </Card>
         )}
 

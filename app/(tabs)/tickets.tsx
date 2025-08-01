@@ -42,6 +42,17 @@ export default function TicketsScreen() {
     fetchBoletos();
   }, []);
 
+  useEffect(() => {
+    switch (activeTab) {
+      case 'active':
+        setActiveBoletos(() => boletos?.filter((b) => b.valido === true));
+        break;
+         case 'history':
+        setActiveBoletos(() => boletos?.filter((b) => b.valido === false));
+        break;
+    }
+  }, [activeTab]);
+
   // Función para abrir el modal QR
   const openQRModal = (ticket: Boleto) => {
     setSelectedTicket(ticket);
@@ -336,7 +347,7 @@ export default function TicketsScreen() {
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {boletos?.length === 0 ? (
+        {activeBoletos?.length === 0 ? (
           <View style={styles.emptyContainer}>
             <Calendar size={48} color={theme.colors.textTertiary} />
             <Text style={styles.emptyText}>
@@ -346,7 +357,7 @@ export default function TicketsScreen() {
             </Text>
           </View>
         ) : (
-          boletos?.map((ticket) => (
+          activeBoletos?.map((ticket) => (
             <Card key={ticket.id} style={styles.ticketCard}>
               <View style={styles.ticketHeader}>
                 <View style={styles.routeInfo}>
@@ -465,7 +476,7 @@ export default function TicketsScreen() {
               <>
                 <View style={styles.qrContainer}>
                   <QRCode
-                    value={`http://localhost:3000/boletos/view/${selectedTicket.tokenBoleto}`}
+                    value={`${API_URL}/boletos/view/${selectedTicket.tokenBoleto}`}
                     size={200}
                     color={theme.colors.primary}
                     backgroundColor="#FFFFFF"
